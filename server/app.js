@@ -1,28 +1,48 @@
 import express from 'express';
 import path from 'path';
-import stats from '../stats.json';
-import chunkManifest from '../dist/chunk-manifest.json';
+import stats from '../dist/stats.json';
 
 const app = express();
 
 app.use(express.static(path.join(__dirname, '../dist')));
 
-app.get('/', function(req, res) {
-  var response = `<!doctype>
-    <html>
-    <head>
-      <script>
-        window.webpackManifest = ${JSON.stringify(chunkManifest)};
-      </script>
-      <script src=${stats.assetsByChunkName.bootstrap}></script>
-      <script src=${stats.assetsByChunkName.index}></script>
-    </head>
-    <body>
-      <p>hi</p>
-    </body>
-    </html>
-  `;
-  res.send(response);
+app.get('/', (req, res) => {
+  res.send('hai');
+});
+
+app.get('/bundle1', (req, res) => {
+  res.send(getResponse(stats['bundle1']));
+});
+
+app.get('/bundle2', (req, res) => {
+  res.send(getResponse(stats['bundle2']));
 });
 
 module.exports = app;
+
+const getResponse = (bundle) => {
+  return `
+    <!doctype>
+    <html>
+    <head>
+      ${getScripts(bundle.js)}
+      ${getStyles(bundle.css)}
+    </head>
+    <body>
+      <p>ho</p>
+    </body>
+    </html>
+  `;
+};
+
+const getScripts = (js) => {
+  return js.reduce((acc, file) => {
+    return acc + `<script src=/${file}></script>\n`;
+  }, '');
+};
+
+const getStyles = (js) => {
+  return js.reduce((acc, file) => {
+    return acc + `<link rel="stylesheet" href=/${file} type="text/css" />\n`;
+  }, '');
+};

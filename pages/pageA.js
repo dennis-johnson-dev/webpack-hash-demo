@@ -1,6 +1,13 @@
-function testing() {
-  console.log('in testing');
-  return 3;
+import './styles/styleA';
+import './styles/styleC';
+
+import _ from 'lodash';
+import moment from 'moment';
+
+function main() {
+  console.log('in main', moment().toISOString());
 }
 
-testing();
+main();
+
+console.log('pageA has loaded');
