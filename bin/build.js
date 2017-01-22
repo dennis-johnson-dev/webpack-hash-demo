@@ -26,7 +26,7 @@ rimraf(path.resolve(__dirname, '../dist'), (err) => {
       process.exit(1);
     }
 
-    // turn entry points into dependent files ()
+    // turn entry points into dependency list of files
     const entryPoints = Object.keys(stats.compilation.entrypoints);
 
     const bundleFiles = entryPoints.reduce((acc, entryPoint) => {
@@ -49,15 +49,10 @@ const sortFilesByType = (chunks) => {
   return _.flatten(chunks.map((chunk) => {
     return chunk.files;
   })).reduce((acc, file) => {
-    const ext = file.match(/\.([\w]+)$/)[0].slice(1);
+    const ext = file.match(/\.([\w]+)$/)[1];
 
-    if (acc[ext]) {
-      acc[ext].push(file);
-    } else {
-      acc[ext] = [file];
-    }
+    acc.hasOwnProperty(ext) ? acc[ext].push(file) : acc[ext] = [file]
 
     return acc;
-
   }, {});
 };

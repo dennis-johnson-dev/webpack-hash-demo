@@ -6,6 +6,8 @@
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "node ./bin/build.js",
+    "prebuild:webpack": "npm run prebuild",
+    "build:webpack": "webpack --progress",
     "start": "nodemon server/index.js --exec babel-node --presets es2015,stage-2",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

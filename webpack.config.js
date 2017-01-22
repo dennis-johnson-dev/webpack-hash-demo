@@ -44,10 +44,26 @@ const defaultConfig = {
       new ExtractTextPlugin({
         filename: "styles.[contenthash].css"
       }),
+      new StatsWriterPlugin({
+        fields: ['entrypoints', 'chunks'],
+        transform: (stats, options) => {
+          const entryPoints = Object.keys(stats.entrypoints);
+
+          const bundleFiles = entryPoints.reduce((acc, entryPoint) => {
+            const chunks = stats.entrypoints[entryPoint].chunks.map((chunk) => {
+              return stats.chunks.find((statsChunk) => statsChunk.id === chunk);
+            });
+
+            acc[entryPoint] = sortFilesByType(chunks);
+            return acc;
+          }, {});
+
+          return JSON.stringify(Object.assign({}, bundleFiles), null, 2);
+        }
+      }),
       new webpack.optimize.AggressiveSplittingPlugin({
-        entryChunkMultiplicator: 1,
         minSize: 90000,
-        maxSize: 130000
+        maxSize: 200000
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true,
@@ -66,6 +82,18 @@ const defaultConfig = {
         sourceMap: true
       })
     ]
+};
+
+const sortFilesByType = (chunks) => {
+  return _.flatten(chunks.map((chunk) => {
+    return chunk.files;
+  })).reduce((acc, file) => {
+    const ext = file.match(/\.([\w]+)$/)[1];
+
+    acc.hasOwnProperty(ext) ? acc[ext].push(file) : acc[ext] = [file]
+
+    return acc;
+  }, {});
 };
 
 const setConfig = function(overrides) {
