@@ -25,11 +25,11 @@ const getResponse = (bundle) => {
     <!doctype>
     <html>
     <head>
-      ${getScripts(bundle.js)}
       ${getStyles(bundle.css)}
     </head>
     <body>
       <p>ho</p>
+      ${getScripts(bundle.js)}
     </body>
     </html>
   `;

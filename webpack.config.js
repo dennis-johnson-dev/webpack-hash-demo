@@ -42,13 +42,12 @@ const defaultConfig = {
         minChunkSize: 2
       }),
       new ExtractTextPlugin({
-        filename: "styles.[contenthash].css",
-        allChunks: false
+        filename: "styles.[contenthash].css"
       }),
       new webpack.optimize.AggressiveSplittingPlugin({
-        chunkOverhead: 300,
         entryChunkMultiplicator: 1,
-        maxSize: 80000
+        minSize: 90000,
+        maxSize: 130000
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true,

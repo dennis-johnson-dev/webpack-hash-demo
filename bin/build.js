@@ -13,6 +13,7 @@ rimraf(path.resolve(__dirname, '../dist'), (err) => {
     process.exit(1);
   }
 
+  // POSSIBLY MAKE A REQUEST TO GET THE RECORDS FILE AND WRITE IT
   const compiler = webpack(config);
 
   compiler.apply(new webpack.ProgressPlugin((percentage, msg) => {
@@ -24,6 +25,8 @@ rimraf(path.resolve(__dirname, '../dist'), (err) => {
       console.log('there was an error in the compilation', err, stats.compilation.errors.map((error) => error.message));
       process.exit(1);
     }
+
+    // turn entry points into dependent files ()
     const entryPoints = Object.keys(stats.compilation.entrypoints);
 
     const bundleFiles = entryPoints.reduce((acc, entryPoint) => {
@@ -37,6 +40,7 @@ rimraf(path.resolve(__dirname, '../dist'), (err) => {
       }
 
       console.log(chalk.cyan('Success!'));
+      // UPLOAD THE NEW RECORDS SOMEWHERE?
     });
   });
 });

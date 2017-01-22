@@ -1,7 +1,6 @@
 import './styles/styleB';
 import './styles/styleC';
 
-import _ from 'lodash';
 import moment from 'moment';
 
 function hai() {
