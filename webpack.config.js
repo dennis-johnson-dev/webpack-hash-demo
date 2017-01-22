@@ -19,7 +19,7 @@ const defaultConfig = {
     },
     stats: {
     },
-    // devtool: 'source-map',
+    devtool: 'source-map',
     recordsPath: path.resolve(__dirname, './records.json'),
     module: {
       rules: [
@@ -49,6 +49,10 @@ const defaultConfig = {
         chunkOverhead: 300,
         entryChunkMultiplicator: 1,
         maxSize: 80000
+      }),
+      new webpack.LoaderOptionsPlugin({
+        minimize: true,
+        debug: false
       }),
       new webpack.optimize.UglifyJsPlugin({
         beautify: false,

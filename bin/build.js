@@ -45,12 +45,15 @@ const sortFilesByType = (chunks) => {
   return _.flatten(chunks.map((chunk) => {
     return chunk.files;
   })).reduce((acc, file) => {
-    if (file.includes('.js')) {
-      acc.js.push(file);
-    } else if (file.includes('.css')) {
-      acc.css.push(file);
+    const ext = file.match(/\.([\w]+)$/)[0].slice(1);
+
+    if (acc[ext]) {
+      acc[ext].push(file);
+    } else {
+      acc[ext] = [file];
     }
 
     return acc;
-  }, { js: [], css: [] });
+
+  }, {});
 };
